@@ -6,7 +6,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class oop2GUI extends JFrame {
     private JPanel oop2;
@@ -23,7 +24,9 @@ public class oop2GUI extends JFrame {
     private JButton serializeButton;
     private JButton deserializeButton;
     private JTextField textField4;
-    private String path;
+    private JTextArea createdInstancesTextArea;
+    private String path, idInfo;
+    public static int globalId;
 
     public oop2GUI(String title) {
         super(title);
@@ -37,17 +40,22 @@ public class oop2GUI extends JFrame {
         textField3.setToolTipText("Write here a field name");
         textField4.setToolTipText("Write here De/Serialization type");
 
+        globalId = 0;
+
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 path = textField1.getText();
-                label1.setText(path);
 
                 try {
                     Class carClass = Class.forName("com.oop2." + path);
                     Object carObject = carClass.newInstance();
 
                     comboBox1.addItem(carObject);
+                    idInfo = idInfo + carClass.getName() + "|globalId: " +
+                            Integer.toString(globalId);
+                    createdInstancesTextArea.setText(idInfo);
+                    globalId++;
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                     label1.setText("No such class!");
@@ -59,53 +67,17 @@ public class oop2GUI extends JFrame {
         readButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                String value = "";
+                String output = null;
                 Object carObject = (Object) comboBox1.getSelectedItem();
                 Class carClass = carObject.getClass();
 
-                Field[] declaredFields = carClass.getDeclaredFields();
-                for (Field field :declaredFields) {
-                    value = value + field;
-                    String buf = "";
-                    buf = buf + field;
-                    int pos = buf.lastIndexOf(".");
-                    buf = buf.substring(pos+1);
-                    Field fieldA = null;
-                    try {
-                        fieldA = carClass.getDeclaredField(buf);
-                    } catch (NoSuchFieldException e) {
-                        e.printStackTrace();
-                    }
-                    String nameValue = null;
-                    fieldA.setAccessible(true);
-                    Class fieldType = fieldA.getType();
-                    String fieldTypeStr = fieldType.getName();
-                    switch(fieldTypeStr) {
-                        case "int":
-                            try {
-                                int intValue = fieldA.getInt(carObject);
-                                nameValue = "    " + Integer.toString(intValue);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-                            break;
-                        case "boolean":
-                            try {
-                                boolean boolValue = fieldA.getBoolean(carObject);
-                                if (boolValue) {
-                                    nameValue = "    true";
-                                }
-                                else {
-                                    nameValue = "    false";
-                                }
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
-                            break;
-                    }
-                    value = value + nameValue + "\n";
+                try {
+                    Method method = carClass.getMethod("getValue", String.class, boolean.class);
+                    output = (String)method.invoke(carObject, "", true);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
                 }
-                textArea1.setText(value);
+                textArea1.setText(output);
             }
         });
 
@@ -114,49 +86,23 @@ public class oop2GUI extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 String name = textField3.getText();
                 String value = textField2.getText();
+                boolean output = false;
 
                 Object carObject = (Object) comboBox1.getSelectedItem();
                 Class carClass = carObject.getClass();
 
-                Field newField = null;
                 try {
-                    newField = carClass.getDeclaredField(name);
-                } catch (NoSuchFieldException e) {
+                    Method method = carClass.getMethod("setValue", String.class, String.class);
+                    output = (boolean) method.invoke(carObject, name, value);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
-                newField.setAccessible(true);
-                Class fieldType = newField.getType();
-                String fieldTypeStr = fieldType.getName();
-                switch(fieldTypeStr) {
-                    case "int":
-                        try {
-                            newField.setInt(carObject, Integer.parseInt(value));
-                        } catch (IllegalAccessException e) {
-                            e.printStackTrace();
-                            label1.setText("No such field!");
-                        }
-                        break;
-                    case "boolean":
-                        if (value.equalsIgnoreCase("true")) {
-                            try {
-                                newField.setBoolean(carObject, true);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                                label1.setText("No such field!");
-                            }
-                        }
-                        else if (value.equalsIgnoreCase("false")) {
-                            try {
-                                newField.setBoolean(carObject, false);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                                label1.setText("No such field!");
-                            }
-                        }
-                        break;
+                if (!(output)) {
+                    label1.setText("No such field!");
                 }
             }
         });
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -165,6 +111,7 @@ public class oop2GUI extends JFrame {
                 carObject = null;
             }
         });
+
         serializeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
