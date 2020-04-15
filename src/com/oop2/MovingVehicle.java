@@ -1,7 +1,6 @@
 package com.oop2;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class MovingVehicle extends Frame implements Serializable {
     protected int maxSpeed, acceleration,

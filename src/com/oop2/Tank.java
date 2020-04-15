@@ -82,7 +82,8 @@ public class Tank extends MovingVehicle implements Serializable {
                     "gasTank: " + Integer.toString(this.gasTank) + "\n" +
                     "working: " + Boolean.toString(this.working) + "\n" +
                     "armor: " + Integer.toString(this.armor) + "\n" +
-                    "shootPower: " + Integer.toString(this.shootPower) + "\n";
+                    "shootPower: " + Integer.toString(this.shootPower) + "\n" +
+                    "ammo: " + Integer.toString(this.ammo);
             return result;
         }
         else {
@@ -107,6 +108,12 @@ public class Tank extends MovingVehicle implements Serializable {
                     return Integer.toString(this.gasTank);
                 case "working":
                     return Boolean.toString(this.working);
+                case "armor":
+                    return Integer.toString(this.armor);
+                case "shootPower":
+                    return Integer.toString(this.shootPower);
+                case "ammo":
+                    return Integer.toString(this.ammo);
                 default:
                     return null;
             }

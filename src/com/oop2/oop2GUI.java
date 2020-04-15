@@ -8,6 +8,8 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 public class oop2GUI extends JFrame {
     private JPanel oop2;
@@ -24,9 +26,9 @@ public class oop2GUI extends JFrame {
     private JButton serializeButton;
     private JButton deserializeButton;
     private JTextField textField4;
-    private JTextArea createdInstancesTextArea;
     private String path, idInfo;
     public static int globalId;
+    private Map<String, Object> elements = new HashMap<>();
 
     public oop2GUI(String title) {
         super(title);
@@ -51,11 +53,13 @@ public class oop2GUI extends JFrame {
                     Class carClass = Class.forName("com.oop2." + path);
                     Object carObject = carClass.newInstance();
 
-                    comboBox1.addItem(carObject);
-                    idInfo = idInfo + carClass.getName() + "|globalId: " +
+                    idInfo = carClass.getName() + "|globalId: " +
                             Integer.toString(globalId);
-                    createdInstancesTextArea.setText(idInfo);
+                    elements.put(idInfo, carObject);
+                    comboBox1.addItem(idInfo);
+
                     globalId++;
+                    label1.setText("Notes");
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
                     e.printStackTrace();
                     label1.setText("No such class!");
@@ -68,7 +72,8 @@ public class oop2GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 String output = null;
-                Object carObject = (Object) comboBox1.getSelectedItem();
+                String key = (String) comboBox1.getSelectedItem();
+                Object carObject = elements.get(key);
                 Class carClass = carObject.getClass();
 
                 try {
@@ -88,12 +93,14 @@ public class oop2GUI extends JFrame {
                 String value = textField2.getText();
                 boolean output = false;
 
-                Object carObject = (Object) comboBox1.getSelectedItem();
+                String key = (String) comboBox1.getSelectedItem();
+                Object carObject = elements.get(key);
                 Class carClass = carObject.getClass();
 
                 try {
                     Method method = carClass.getMethod("setValue", String.class, String.class);
                     output = (boolean) method.invoke(carObject, name, value);
+                    label1.setText("Notes");
                 } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
@@ -106,9 +113,11 @@ public class oop2GUI extends JFrame {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                Object carObject = (Object) comboBox1.getSelectedItem();
-                comboBox1.removeItem(carObject);
-                carObject = null;
+                String key = (String) comboBox1.getSelectedItem();
+                Object carObject = elements.get(key);
+                comboBox1.removeItem(key);
+                elements.remove(key);
+                textArea1.setText("fields");
             }
         });
 

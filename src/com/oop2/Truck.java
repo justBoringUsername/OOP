@@ -22,53 +22,6 @@ public class Truck extends Car implements Serializable {
     }
 
     public boolean setValue(String name, String value) {
-        int pos = name.indexOf(".");
-        String agr = name.substring(0, pos-1);
-
-        if (agr == "cargoSpecial") {
-            String agrP = name.substring(pos+1);
-            switch (agrP) {
-                case "enginePower":
-                    this.cargoSpecial.enginePower = Integer.parseInt(value);
-                    return true;
-                case "body":
-                    this.cargoSpecial.body = Integer.parseInt(value);
-                    return true;
-                case "id":
-                    this.cargoSpecial.id = Integer.parseInt(value);
-                    return true;
-                case "engineState":
-                    this.cargoSpecial.engineState = Boolean.parseBoolean(value);
-                    return true;
-                case "maxSpeed":
-                    this.cargoSpecial.maxSpeed = Integer.parseInt(value);
-                    return true;
-                case "acceleration":
-                    this.cargoSpecial.acceleration = Integer.parseInt(value);
-                    return true;
-                case "direction":
-                    this.cargoSpecial.direction = Integer.parseInt(value);
-                    return true;
-                case "handling":
-                    this.cargoSpecial.handling = Integer.parseInt(value);
-                    return true;
-                case "gasTank":
-                    this.cargoSpecial.gasTank = Integer.parseInt(value);
-                    return true;
-                case "working":
-                    this.cargoSpecial.working = Boolean.parseBoolean(value);
-                    return true;
-                case "soundLevel":
-                    this.cargoSpecial.soundLevel = Integer.parseInt(value);
-                    return true;
-                case "lightsOn":
-                    this.cargoSpecial.lightsOn = Boolean.parseBoolean(value);
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
         switch (name) {
             case "enginePower":
                 this.enginePower = Integer.parseInt(value);
@@ -109,6 +62,42 @@ public class Truck extends Car implements Serializable {
             case "cargoSize":
                 this.cargoSize = Integer.parseInt(value);
                 return true;
+            case "cargoSpecial.enginePower":
+                this.cargoSpecial.enginePower = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.body":
+                this.cargoSpecial.body = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.id":
+                this.cargoSpecial.id = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.engineState":
+                this.cargoSpecial.engineState = Boolean.parseBoolean(value);
+                return true;
+            case "cargoSpecial.maxSpeed":
+                this.cargoSpecial.maxSpeed = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.acceleration":
+                this.cargoSpecial.acceleration = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.direction":
+                this.cargoSpecial.direction = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.handling":
+                this.cargoSpecial.handling = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.gasTank":
+                this.cargoSpecial.gasTank = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.working":
+                this.cargoSpecial.working = Boolean.parseBoolean(value);
+                return true;
+            case "cargoSpecial.soundLevel":
+                this.cargoSpecial.soundLevel = Integer.parseInt(value);
+                return true;
+            case "cargoSpecial.lightsOn":
+                this.cargoSpecial.lightsOn = Boolean.parseBoolean(value);
+                return true;
             default:
                 return false;
         }
@@ -128,7 +117,7 @@ public class Truck extends Car implements Serializable {
                     "working: " + Boolean.toString(this.working) + "\n" +
                     "soundLevel: " + Integer.toString(this.soundLevel) + "\n" +
                     "lightsOn: " + Boolean.toString(this.lightsOn) + "\n" +
-                    "cargoSize: " + Integer.toString(this.cargoSize);
+                    "cargoSize: " + Integer.toString(this.cargoSize) + "\n";
 
                 result = result +
                         "cargoSpecial.enginePower: " + Integer.toString(this.cargoSpecial.enginePower) + "\n" +
@@ -147,41 +136,6 @@ public class Truck extends Car implements Serializable {
             return result;
         }
         else {
-            int pos = name.indexOf(".");
-            String agr = name.substring(0, pos-1);
-
-            if (agr == "cargoSpecial") {
-                String agrP = name.substring(pos+1);
-                switch (agrP) {
-                    case "enginePower":
-                        return Integer.toString(this.cargoSpecial.enginePower);
-                    case "body":
-                        return Integer.toString(this.cargoSpecial.body);
-                    case "id":
-                        return Integer.toString(this.cargoSpecial.id);
-                    case "engineState":
-                        return Boolean.toString(this.cargoSpecial.engineState);
-                    case "maxSpeed":
-                        return Integer.toString(this.cargoSpecial.maxSpeed);
-                    case "acceleration":
-                        return Integer.toString(this.cargoSpecial.acceleration);
-                    case "direction":
-                        return Integer.toString(this.cargoSpecial.direction);
-                    case "handling":
-                        return Integer.toString(this.cargoSpecial.handling);
-                    case "gasTank":
-                        return Integer.toString(this.cargoSpecial.gasTank);
-                    case "working":
-                        return Boolean.toString(this.cargoSpecial.working);
-                    case "soundLevel":
-                        return Integer.toString(this.cargoSpecial.soundLevel);
-                    case "lightsOn":
-                        return Boolean.toString(this.cargoSpecial.lightsOn);
-                    default:
-                        return null;
-                }
-            }
-
             switch (name) {
                 case "enginePower":
                     return Integer.toString(this.enginePower);
@@ -209,6 +163,30 @@ public class Truck extends Car implements Serializable {
                     return Boolean.toString(this.lightsOn);
                 case "cargoSize":
                     return Integer.toString(this.cargoSize);
+                case "cargoSpecial.enginePower":
+                    return Integer.toString(this.cargoSpecial.enginePower);
+                case "cargoSpecial.body":
+                    return Integer.toString(this.cargoSpecial.body);
+                case "cargoSpecial.id":
+                    return Integer.toString(this.cargoSpecial.id);
+                case "cargoSpecial.engineState":
+                    return Boolean.toString(this.cargoSpecial.engineState);
+                case "cargoSpecial.maxSpeed":
+                    return Integer.toString(this.cargoSpecial.maxSpeed);
+                case "cargoSpecial.acceleration":
+                    return Integer.toString(this.cargoSpecial.acceleration);
+                case "cargoSpecial.direction":
+                    return Integer.toString(this.cargoSpecial.direction);
+                case "cargoSpecial.handling":
+                    return Integer.toString(this.cargoSpecial.handling);
+                case "cargoSpecial.gasTank":
+                    return Integer.toString(this.cargoSpecial.gasTank);
+                case "cargoSpecial.working":
+                    return Boolean.toString(this.cargoSpecial.working);
+                case "cargoSpecial.soundLevel":
+                    return Integer.toString(this.cargoSpecial.soundLevel);
+                case "cargoSpecial.lightsOn":
+                    return Boolean.toString(this.cargoSpecial.lightsOn);
                 default:
                     return null;
             }
