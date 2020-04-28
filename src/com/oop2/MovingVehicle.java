@@ -134,4 +134,44 @@ public class MovingVehicle extends Frame implements Serializable {
             }
         }
     }
+
+    public int getBody() {
+        return body;
+    }
+
+    public int getEnginePower() {
+        return enginePower;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean getEngineState() {
+        return engineState;
+    }
+
+    public int getAcceleration() {
+        return acceleration;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public int getGasTank() {
+        return gasTank;
+    }
+
+    public int getHandling() {
+        return handling;
+    }
+
+    public int getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public boolean getWorking() {
+        return working;
+    }
 }

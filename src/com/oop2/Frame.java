@@ -63,4 +63,20 @@ public class Frame implements Serializable {
             }
         }
     }
+
+    public int getBody() {
+        return body;
+    }
+
+    public int getEnginePower() {
+        return enginePower;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public boolean getEngineState() {
+        return engineState;
+    }
 }

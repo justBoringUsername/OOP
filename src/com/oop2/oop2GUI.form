@@ -55,7 +55,7 @@
         </constraints>
         <properties>
           <text value="Serialize!"/>
-          <visible value="false"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="4d08c" class="javax.swing.JButton" binding="deserializeButton" default-binding="true">
@@ -64,7 +64,7 @@
         </constraints>
         <properties>
           <text value="Deserialize!"/>
-          <visible value="false"/>
+          <visible value="true"/>
         </properties>
       </component>
       <component id="ba1e7" class="javax.swing.JTextField" binding="textField4" default-binding="true">
