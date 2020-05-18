@@ -1,26 +1,29 @@
-package com.oop2;
+package com.oop2.content;
 
 import java.io.Serializable;
+import java.util.*;
 
-public class Tank extends MovingVehicle implements Serializable {
-    private int armor, shootPower, ammo;
+public class Car extends MovingVehicle implements Serializable {
+    protected boolean lightsOn;
+    protected int soundLevel;
 
-    public Tank() {
+    public Car() {
         super();
-        this.armor = 0;
-        this.shootPower = 0;
-        this.ammo = 0;
+        this.lightsOn = false;
+        this.soundLevel = 0;
     }
 
-    public boolean shoot(int ammoToUse) {
-        if (this.ammo >= ammoToUse) {
-            this.ammo = this.ammo - ammoToUse;
-            this.armor = this.armor - this.shootPower * ammoToUse / 2;
-            return true;
+    public void lightsClick () {
+        if (this.lightsOn) {
+            this.lightsOn = false;
         }
         else {
-            return false;
+            this.lightsOn = true;
         }
+    }
+
+    public void signal() {
+        this.soundLevel++;
     }
 
     public boolean setValue(String name, String value) {
@@ -55,14 +58,11 @@ public class Tank extends MovingVehicle implements Serializable {
             case "working":
                 this.working = Boolean.parseBoolean(value);
                 return true;
-            case "armor":
-                this.armor = Integer.parseInt(value);
+            case "soundLevel":
+                this.soundLevel = Integer.parseInt(value);
                 return true;
-            case "shootPower":
-                this.shootPower = Integer.parseInt(value);
-                return true;
-            case "ammo":
-                this.ammo = Integer.parseInt(value);
+            case "lightsOn":
+                this.lightsOn = Boolean.parseBoolean(value);
                 return true;
             default:
                 return false;
@@ -81,9 +81,8 @@ public class Tank extends MovingVehicle implements Serializable {
                     "handling: " + Integer.toString(this.handling) + "\n" +
                     "gasTank: " + Integer.toString(this.gasTank) + "\n" +
                     "working: " + Boolean.toString(this.working) + "\n" +
-                    "armor: " + Integer.toString(this.armor) + "\n" +
-                    "shootPower: " + Integer.toString(this.shootPower) + "\n" +
-                    "ammo: " + Integer.toString(this.ammo);
+                    "soundLevel: " + Integer.toString(this.soundLevel) + "\n" +
+                    "lightsOn: " + Boolean.toString(this.lightsOn);
             return result;
         }
         else {
@@ -108,12 +107,10 @@ public class Tank extends MovingVehicle implements Serializable {
                     return Integer.toString(this.gasTank);
                 case "working":
                     return Boolean.toString(this.working);
-                case "armor":
-                    return Integer.toString(this.armor);
-                case "shootPower":
-                    return Integer.toString(this.shootPower);
-                case "ammo":
-                    return Integer.toString(this.ammo);
+                case "soundLevel":
+                    return Integer.toString(this.soundLevel);
+                case "lightsOn":
+                    return Boolean.toString(this.lightsOn);
                 default:
                     return null;
             }
@@ -160,15 +157,30 @@ public class Tank extends MovingVehicle implements Serializable {
         return working;
     }
 
-    public int getAmmo() {
-        return ammo;
+    public int getSoundLevel() {
+        return soundLevel;
     }
 
-    public int getArmor() {
-        return armor;
+    public boolean getLightsOn() {
+        return lightsOn;
     }
 
-    public int getShootPower() {
-        return shootPower;
+    public Set<String> WhoAmI() {
+        Set<String> newSet = null;
+        LinkedHashMap<String, String> buf = new LinkedHashMap<>();
+        buf.put("enginePower", "0");
+        buf.put("body", "0");
+        buf.put("id", "0");
+        buf.put("engineState", "0");
+        buf.put("maxSpeed", "0");
+        buf.put("acceleration", "0");
+        buf.put("handling", "0");
+        buf.put("gasTank", "0");
+        buf.put("direction", "0");
+        buf.put("working", "0");
+        buf.put("lightsOn", "0");
+        buf.put("soundLevel", "0");
+        newSet = buf.keySet();
+        return newSet;
     }
 }

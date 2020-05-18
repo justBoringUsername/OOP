@@ -5,19 +5,13 @@ import io.github.classgraph.ClassInfo;
 import io.github.classgraph.ScanResult;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+
+import com.oop2.Other.*;
 
 public class oop2GUI extends JFrame {
     private JPanel oop2;
@@ -34,11 +28,14 @@ public class oop2GUI extends JFrame {
     private JButton serializeButton;
     private JButton deserializeButton;
     private JTextField textField4;
+    private JLabel label2;
+    private JTextArea textArea2;
     private String path, idInfo;
     public static int globalId;
     private Map<String, Object> elements = new HashMap<>();
-    private ArrayList<Object> elementsArr = new ArrayList<>();
     private ArrayList<Object> elementsNew = new ArrayList<>();
+    private ArrayList<String> plugins = new ArrayList<>();
+    private ArrayList<Object> elementsClone = new ArrayList<>();
 
     public oop2GUI(String title) {
         super(title);
@@ -51,8 +48,22 @@ public class oop2GUI extends JFrame {
         textField2.setToolTipText("Write here a value");
         textField3.setToolTipText("Write here a field name");
         textField4.setToolTipText("Write here De/Serialization type");
+        getClasses();
 
         globalId = 0;
+
+        try (ScanResult scanResult = new ClassGraph()
+                .whitelistPackages("com.oop2.plugins")
+                .scan()) {
+            for (ClassInfo classInfo : scanResult.getAllClasses()) {
+                String newStr = classInfo.getName();
+                newStr = newStr.substring(17);
+                plugins.add(newStr);
+            }
+        }
+        if (plugins.isEmpty()) {
+            label2.setText("No plugins found");
+        }
 
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -60,13 +71,13 @@ public class oop2GUI extends JFrame {
                 path = textField1.getText();
 
                 try {
-                    Class carClass = Class.forName("com.oop2." + path);
+                    Class carClass = Class.forName("com.oop2.content." + path);
                     Object carObject = carClass.newInstance();
 
                     idInfo = carClass.getName() + "|globalId: " +
                             Integer.toString(globalId);
                     elements.put(idInfo, carObject);
-                    elementsArr.add(carObject);
+                    elementsClone.add(carObject);
                     comboBox1.addItem(idInfo);
 
                     globalId++;
@@ -128,6 +139,7 @@ public class oop2GUI extends JFrame {
                 Object carObject = elements.get(key);
                 comboBox1.removeItem(key);
                 elements.remove(key);
+                elementsClone.remove(carObject);
                 textArea1.setText("fields");
             }
         });
@@ -136,25 +148,34 @@ public class oop2GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JFileChooser fileOpen = new JFileChooser();
+                fileOpen.setAcceptAllFileFilterUsed(false);
                 for (String filterStr: getSerialize()) {
-                    FileFilterExt filterExt = new FileFilterExt("SerializeType", filterStr);
+                    FileFilterExt filterExt = new FileFilterExt("."+filterStr, "."+filterStr);
                     fileOpen.addChoosableFileFilter(filterExt);
+                }
+                for (String filterStr1: getSerialize()) {
+                    for (String filterStr2: plugins) {
+                        FileFilterExt filterExt = new FileFilterExt("."+filterStr1+filterStr2, "."+filterStr1+filterStr2);
+                        fileOpen.addChoosableFileFilter(filterExt);
+                    }
                 }
                 fileOpen.setDialogTitle("Save File");
                 fileOpen.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int ret = fileOpen.showDialog(null, "Save File");
                 if (ret == JFileChooser.APPROVE_OPTION) {
+                    String ex = fileOpen.getFileFilter().getDescription();
+                    ex = ex.substring(1);
                     String extensionFrom = fileOpen.getSelectedFile() + "";
                     int pos = extensionFrom.lastIndexOf(".");
                     extensionFrom = extensionFrom.substring(pos+1, extensionFrom.length());
 
                     try {
-                        Class serClass = Class.forName("com.oop2.Serialize.Serialize" + extensionFrom.toUpperCase());
+                        Class serClass = Class.forName("com.oop2.Serialize.Serialize" + ex.toUpperCase());
                         Object serObject = serClass.newInstance();
                         Method method1 = serClass.getMethod("setFilename", String.class);
                         method1.invoke(serObject, fileOpen.getSelectedFile() + "");
-                        Method method2 = serClass.getMethod("putObjects", Collection.class);
-                        method2.invoke(serObject, elementsArr);
+                        Method method2 = serClass.getMethod("putObjects", ArrayList.class);
+                        method2.invoke(serObject, elementsClone);
                     } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
                         e.printStackTrace();
                     }
@@ -166,8 +187,9 @@ public class oop2GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 JFileChooser fileOpen = new JFileChooser();
+                fileOpen.setAcceptAllFileFilterUsed(false);
                 for (String filterStr: getSerialize()) {
-                    FileFilterExt filterExt = new FileFilterExt("SerializeType", filterStr);
+                    FileFilterExt filterExt = new FileFilterExt("."+filterStr, "."+filterStr);
                     fileOpen.addChoosableFileFilter(filterExt);
                 }
                 fileOpen.setDialogTitle("Save File");
@@ -175,11 +197,13 @@ public class oop2GUI extends JFrame {
                 int ret = fileOpen.showDialog(null, "Open File");
                 if (ret == JFileChooser.APPROVE_OPTION) {
                     String extensionFrom = fileOpen.getSelectedFile() + "";
+                    String ex = fileOpen.getFileFilter().getDescription();
+                    ex = ex.substring(1);
                     int pos = extensionFrom.lastIndexOf(".");
                     extensionFrom = extensionFrom.substring(pos+1, extensionFrom.length());
 
                     try {
-                        Class serClass = Class.forName("com.oop2.Serialize.Serialize" + extensionFrom.toUpperCase());
+                        Class serClass = Class.forName("com.oop2.Serialize.Serialize" + ex.toUpperCase());
                         Object serObject = serClass.newInstance();
                         Method method1 = serClass.getMethod("setFilename", String.class);
                         method1.invoke(serObject, fileOpen.getSelectedFile() + "");
@@ -190,7 +214,7 @@ public class oop2GUI extends JFrame {
                             idInfo = carClass.getName() + "|globalId: " +
                                     Integer.toString(globalId);
                             elements.put(idInfo, newObj);
-                            elementsArr.add(newObj);
+                            elementsClone.add(newObj);
                             comboBox1.addItem(idInfo);
 
                             globalId++;
@@ -222,8 +246,25 @@ public class oop2GUI extends JFrame {
         return SerializeClasses;
     }
 
+    public void getClasses() {
+        String output = "Classes:\n";
+        try (ScanResult scanResult = new ClassGraph()
+                .whitelistPackages("com.oop2.content")
+                .scan()) {
+            for (ClassInfo classInfo : scanResult.getAllClasses()) {
+                    String newStr = classInfo.getName();
+                    newStr = newStr.substring(17, classInfo.getName().length());
+                    if (newStr.length() != 0) {
+                        output += newStr;
+                        output += "\n";
+                    }
+                }
+            }
+        textArea2.setText(output);
+    }
+
     public static void main(String[] args) {
-        JFrame frame = new oop2GUI("oop2");
+        JFrame frame = new oop2GUI("OOP");
         frame.setVisible(true);
     }
 

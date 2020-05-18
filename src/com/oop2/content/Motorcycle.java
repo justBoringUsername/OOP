@@ -1,6 +1,7 @@
-package com.oop2;
+package com.oop2.content;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class Motorcycle extends MovingVehicle implements Serializable {
     private int jumpHeight;
@@ -145,5 +146,23 @@ public class Motorcycle extends MovingVehicle implements Serializable {
 
     public int getJumpHeight() {
         return jumpHeight;
+    }
+
+    public Set<String> WhoAmI() {
+        Set<String> newSet = null;
+        LinkedHashMap<String, String> buf = new LinkedHashMap<>();
+        buf.put("enginePower", "0");
+        buf.put("body", "0");
+        buf.put("id", "0");
+        buf.put("engineState", "0");
+        buf.put("maxSpeed", "0");
+        buf.put("acceleration", "0");
+        buf.put("handling", "0");
+        buf.put("gasTank", "0");
+        buf.put("direction", "0");
+        buf.put("working", "0");
+        buf.put("jumpHeight", "0");
+        newSet = buf.keySet();
+        return newSet;
     }
 }

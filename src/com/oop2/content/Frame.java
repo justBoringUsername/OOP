@@ -1,6 +1,9 @@
-package com.oop2;
+package com.oop2.content;
+
+import com.oop2.oop2GUI;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class Frame implements Serializable {
     protected int enginePower, body, id;
@@ -78,5 +81,16 @@ public class Frame implements Serializable {
 
     public boolean getEngineState() {
         return engineState;
+    }
+
+    public Set<String> WhoAmI() {
+        Set<String> newSet = null;
+        LinkedHashMap<String, String> buf = new LinkedHashMap<>();
+        buf.put("enginePower", "0");
+        buf.put("body", "0");
+        buf.put("id", "0");
+        buf.put("engineState", "0");
+        newSet = buf.keySet();
+        return newSet;
     }
 }

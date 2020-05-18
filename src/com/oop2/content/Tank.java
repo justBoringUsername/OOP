@@ -1,54 +1,24 @@
-package com.oop2;
+package com.oop2.content;
+
+import com.oop2.content.MovingVehicle;
 
 import java.io.Serializable;
+import java.util.*;
 
-public class MovingVehicle extends Frame implements Serializable {
-    protected int maxSpeed, acceleration,
-            handling, gasTank, direction;
-    protected boolean working;
+public class Tank extends MovingVehicle implements Serializable {
+    private int armor, shootPower, ammo;
 
-    public MovingVehicle() {
+    public Tank() {
         super();
-        this.maxSpeed = 1;
-        this.acceleration = 0;
-        this.direction = 0;
-        this.handling = 1;
-        this.gasTank = 1;
-        this.working = false;
+        this.armor = 0;
+        this.shootPower = 0;
+        this.ammo = 0;
     }
 
-    public boolean move() {
-        if ((this.gasTank >= 1) && (this.working)) {
-            this.gasTank--;
-            if (this.acceleration < this.maxSpeed) {
-                this.acceleration++;
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean brake() {
-        if (this.working) {
-            this.acceleration--;
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-
-    public boolean turn() {
-        if (this.working) {
-            this.direction = this.direction + this.handling;
-            if (this.direction < -360) {
-                this.direction = this.direction + 360;
-            }
-            if (this.direction > 360) {
-                this.direction = this.direction - 360;
-            }
+    public boolean shoot(int ammoToUse) {
+        if (this.ammo >= ammoToUse) {
+            this.ammo = this.ammo - ammoToUse;
+            this.armor = this.armor - this.shootPower * ammoToUse / 2;
             return true;
         }
         else {
@@ -88,6 +58,15 @@ public class MovingVehicle extends Frame implements Serializable {
             case "working":
                 this.working = Boolean.parseBoolean(value);
                 return true;
+            case "armor":
+                this.armor = Integer.parseInt(value);
+                return true;
+            case "shootPower":
+                this.shootPower = Integer.parseInt(value);
+                return true;
+            case "ammo":
+                this.ammo = Integer.parseInt(value);
+                return true;
             default:
                 return false;
         }
@@ -104,7 +83,10 @@ public class MovingVehicle extends Frame implements Serializable {
                     "direction: " + Integer.toString(this.direction) + "\n" +
                     "handling: " + Integer.toString(this.handling) + "\n" +
                     "gasTank: " + Integer.toString(this.gasTank) + "\n" +
-                    "working: " + Boolean.toString(this.working);
+                    "working: " + Boolean.toString(this.working) + "\n" +
+                    "armor: " + Integer.toString(this.armor) + "\n" +
+                    "shootPower: " + Integer.toString(this.shootPower) + "\n" +
+                    "ammo: " + Integer.toString(this.ammo);
             return result;
         }
         else {
@@ -129,6 +111,12 @@ public class MovingVehicle extends Frame implements Serializable {
                     return Integer.toString(this.gasTank);
                 case "working":
                     return Boolean.toString(this.working);
+                case "armor":
+                    return Integer.toString(this.armor);
+                case "shootPower":
+                    return Integer.toString(this.shootPower);
+                case "ammo":
+                    return Integer.toString(this.ammo);
                 default:
                     return null;
             }
@@ -173,5 +161,37 @@ public class MovingVehicle extends Frame implements Serializable {
 
     public boolean getWorking() {
         return working;
+    }
+
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public int getArmor() {
+        return armor;
+    }
+
+    public int getShootPower() {
+        return shootPower;
+    }
+
+    public Set<String> WhoAmI() {
+        Set<String> newSet = null;
+        LinkedHashMap<String, String> buf = new LinkedHashMap<>();
+        buf.put("enginePower", "0");
+        buf.put("body", "0");
+        buf.put("id", "0");
+        buf.put("engineState", "0");
+        buf.put("maxSpeed", "0");
+        buf.put("acceleration", "0");
+        buf.put("handling", "0");
+        buf.put("gasTank", "0");
+        buf.put("direction", "0");
+        buf.put("working", "0");
+        buf.put("armor", "0");
+        buf.put("shootPower", "0");
+        buf.put("ammo", "0");
+        newSet = buf.keySet();
+        return newSet;
     }
 }

@@ -1,6 +1,9 @@
-package com.oop2;
+package com.oop2.content;
+
+import com.oop2.content.Car;
 
 import java.io.Serializable;
+import java.util.*;
 
 public class Truck extends Car implements Serializable {
     private int cargoSize;
@@ -191,5 +194,34 @@ public class Truck extends Car implements Serializable {
                     return null;
             }
         }
+    }
+
+    public int getCargoSize() {
+        return cargoSize;
+    }
+
+    public Car getCargoSpecial() {
+        return cargoSpecial;
+    }
+
+    public Set<String> WhoAmI() {
+        Set<String> newSet = null;
+        LinkedHashMap<String, String> buf = new LinkedHashMap<>();
+        buf.put("enginePower", "0");
+        buf.put("body", "0");
+        buf.put("id", "0");
+        buf.put("engineState", "0");
+        buf.put("maxSpeed", "0");
+        buf.put("acceleration", "0");
+        buf.put("handling", "0");
+        buf.put("gasTank", "0");
+        buf.put("direction", "0");
+        buf.put("working", "0");
+        buf.put("lightsOn", "0");
+        buf.put("soundLevel", "0");
+        buf.put("cargoSize", "0");
+        buf.put("cargoSpecial", "0");
+        newSet = buf.keySet();
+        return newSet;
     }
 }

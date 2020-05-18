@@ -1,6 +1,7 @@
 package com.oop2.Serialize;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class SerializeOOS {
@@ -10,7 +11,7 @@ public class SerializeOOS {
         this.filename = filename;
     }
 
-    public void putObjects(Collection<Object> carObjects) {
+    public void putObjects(ArrayList<Object> carObjects) {
 
         try(ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename)))
         {
@@ -21,11 +22,11 @@ public class SerializeOOS {
         }
     }
 
-    public Collection<Object> getObjects() {
+    public ArrayList<Object> getObjects() {
 
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename)))
         {
-            Collection<Object> carObjects =(Collection<Object>)ois.readObject();
+            ArrayList<Object> carObjects =(ArrayList<Object>)ois.readObject();
             return carObjects;
         }
         catch(Exception ex){

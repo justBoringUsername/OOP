@@ -1,28 +1,29 @@
-package com.oop2;
+package com.oop2.content;
+
+import com.oop2.content.Car;
 
 import java.io.Serializable;
+import java.util.*;
 
-public class Car extends MovingVehicle implements Serializable {
-    protected boolean lightsOn;
-    protected int soundLevel;
+public class SUV extends Car implements Serializable {
+    private int crushPower;
 
-    public Car() {
+    public SUV() {
         super();
-        this.lightsOn = false;
-        this.soundLevel = 0;
+        this.crushPower = 0;
     }
 
-    public void lightsClick () {
-        if (this.lightsOn) {
-            this.lightsOn = false;
+    public void turnAround() {
+        if (this.direction > 360) {
+            this.direction = this.direction - 360;
         }
-        else {
-            this.lightsOn = true;
+        if (this.direction < -360) {
+            this.direction = this.direction + 360;
         }
     }
 
-    public void signal() {
-        this.soundLevel++;
+    public void crushObstacle() {
+        this.crushPower--;
     }
 
     public boolean setValue(String name, String value) {
@@ -63,6 +64,9 @@ public class Car extends MovingVehicle implements Serializable {
             case "lightsOn":
                 this.lightsOn = Boolean.parseBoolean(value);
                 return true;
+            case "crushPower":
+                this.crushPower = Integer.parseInt(value);
+                return true;
             default:
                 return false;
         }
@@ -81,7 +85,8 @@ public class Car extends MovingVehicle implements Serializable {
                     "gasTank: " + Integer.toString(this.gasTank) + "\n" +
                     "working: " + Boolean.toString(this.working) + "\n" +
                     "soundLevel: " + Integer.toString(this.soundLevel) + "\n" +
-                    "lightsOn: " + Boolean.toString(this.lightsOn);
+                    "lightsOn: " + Boolean.toString(this.lightsOn) + "\n" +
+                    "crushPower: " + Integer.toString(this.crushPower);
             return result;
         }
         else {
@@ -110,49 +115,35 @@ public class Car extends MovingVehicle implements Serializable {
                     return Integer.toString(this.soundLevel);
                 case "lightsOn":
                     return Boolean.toString(this.lightsOn);
+                case "crushPower":
+                    return Integer.toString(this.crushPower);
                 default:
                     return null;
             }
         }
     }
 
-    public int getBody() {
-        return body;
+    public int getCrushPower() {
+        return crushPower;
     }
 
-    public int getEnginePower() {
-        return enginePower;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public boolean getEngineState() {
-        return engineState;
-    }
-
-    public int getAcceleration() {
-        return acceleration;
-    }
-
-    public int getDirection() {
-        return direction;
-    }
-
-    public int getGasTank() {
-        return gasTank;
-    }
-
-    public int getHandling() {
-        return handling;
-    }
-
-    public int getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    public boolean getWorking() {
-        return working;
+    public Set<String> WhoAmI() {
+        Set<String> newSet = null;
+        LinkedHashMap<String, String> buf = new LinkedHashMap<>();
+        buf.put("enginePower", "0");
+        buf.put("body", "0");
+        buf.put("id", "0");
+        buf.put("engineState", "0");
+        buf.put("maxSpeed", "0");
+        buf.put("acceleration", "0");
+        buf.put("handling", "0");
+        buf.put("gasTank", "0");
+        buf.put("direction", "0");
+        buf.put("working", "0");
+        buf.put("lightsOn", "0");
+        buf.put("soundLevel", "0");
+        buf.put("crushPower", "0");
+        newSet = buf.keySet();
+        return newSet;
     }
 }
