@@ -46,7 +46,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$USER_HOME$/Downloads/xstream-distribution-1.4.12-bin/xstream-1.4.12/lib/xstream-1.4.12.jar!/" />
+          <root url="jar://$MODULE_DIR$/libraries/commons-codec-1.14.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -55,14 +55,10 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="file://$USER_HOME$/Downloads/xstream-distribution-1.4.12-bin/xstream-1.4.12/lib" />
+          <root url="jar://$MODULE_DIR$/libraries/commons-codec-1.14-tests.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="file://$USER_HOME$/Downloads/xstream-distribution-1.4.12-bin/xstream-1.4.12/lib" />
-        </SOURCES>
-        <jarDirectory url="file://$USER_HOME$/Downloads/xstream-distribution-1.4.12-bin/xstream-1.4.12/lib" recursive="false" />
-        <jarDirectory url="file://$USER_HOME$/Downloads/xstream-distribution-1.4.12-bin/xstream-1.4.12/lib" recursive="false" type="SOURCES" />
+        <SOURCES />
       </library>
     </orderEntry>
   </component>
