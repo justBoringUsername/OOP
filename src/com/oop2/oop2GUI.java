@@ -52,19 +52,7 @@ public class oop2GUI extends JFrame {
         getClasses();
 
         globalId = 0;
-
-        try (ScanResult scanResult = new ClassGraph()
-                .whitelistPackages("com.oop2.plugins")
-                .scan()) {
-            for (ClassInfo classInfo : scanResult.getAllClasses()) {
-                String newStr = classInfo.getName();
-                newStr = newStr.substring(17);
-                plugins.add(newStr);
-            }
-        }
-        if (plugins.isEmpty()) {
-            label2.setText("No plugins found");
-        }
+        getPlugins();
 
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -148,6 +136,7 @@ public class oop2GUI extends JFrame {
         serializeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                getPlugins();
                 JFileChooser fileOpen = new JFileChooser();
                 fileOpen.setAcceptAllFileFilterUsed(false);
                 for (String filterStr: getSerialize()) {
@@ -211,6 +200,7 @@ public class oop2GUI extends JFrame {
         deserializeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                getPlugins();
                 JFileChooser fileOpen = new JFileChooser();
                 fileOpen.setDialogTitle("Save File");
                 fileOpen.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -221,6 +211,7 @@ public class oop2GUI extends JFrame {
                     extensionFrom = extensionFrom.substring(pos+1, extensionFrom.length());
                     String ex = extensionFrom;
                     boolean plugInOn = false;
+                    boolean plugError = true;
                     String exSer = "";
                     String plugName = "";
                     for (String plugIn: plugins) {
@@ -228,16 +219,11 @@ public class oop2GUI extends JFrame {
                             plugInOn = true;
                             plugName = plugIn;
                             exSer = ex.replace(plugIn, "");
+                            plugError = false;
                         }
                     }
-
-                    boolean plugError = false;
-                    if (plugins.isEmpty())
-                        plugError = true;
-                        for (String elem: getSerialize()) {
-                            if (elem == ex)
-                                plugError = false;
-                        }
+                    if (ex.length() < 4)
+                        plugError = false;
 
                     if (plugError) {
                         JOptionPane.showMessageDialog(oop2GUI.this, "<html><h2>Error</h2>" +
@@ -329,6 +315,22 @@ public class oop2GUI extends JFrame {
                 }
             }
         textArea2.setText(output);
+    }
+
+    public void getPlugins() {
+        plugins.clear();
+        try (ScanResult scanResult = new ClassGraph()
+                .whitelistPackages("com.oop2.plugins")
+                .scan()) {
+            for (ClassInfo classInfo : scanResult.getAllClasses()) {
+                String newStr = classInfo.getName();
+                newStr = newStr.substring(17);
+                plugins.add(newStr);
+            }
+        }
+        if (plugins.isEmpty()) {
+            label2.setText("No plugins found");
+        }
     }
 
     public static void main(String[] args) {
